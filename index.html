@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        * {padding:0; margin:0; box-sizing: border-box};
+        #canvas {
+            display:block;
+        }
+    </style>
+</head>
+<body>
+<canvas id = 'canvas' width="100" height="100" style="border: 1px solid black"></canvas>
+</body>
+<script>
+    let canvas = document.getElementById('canvas');
+    canvas.width = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
+    let ctx = canvas.getContext('2d');
+    ctx.fillStyle = "black";
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    function drawLine(x1, y1, x2, y2) {
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    }
+    let lastPos;
+    let isPressed = false;
+    if ('ontouchstart' in window) {
+        console.log('hi');
+        console.log(ctx.strokeWidth);
+        ontouchstart = (e) => {
+            lastPos = [e.touches[0].clientX, e.touches[0].clientY];
+        }
+        ontouchmove = (e) => {
+            drawLine(lastPos[0], lastPos[1], e.touches[0].clientX, e.touches[0].clientY);
+            lastPos = [e.touches[0].clientX, e.touches[0].clientY];
+        }
+
+    } else {
+        console.log('mouse');
+        onmousedown = (e) => {
+            lastPos = [e.clientX, e.clientY];
+            isPressed = true;
+        }
+        onmousemove = (e) => {
+            if (isPressed) {
+                drawLine(lastPos[0], lastPos[1], e.clientX, e.clientY);
+                lastPos = [e.clientX, e.clientY];
+            }
+        }
+        onmouseup = () => {
+            isPressed = false;
+        }
+    }
+</script>
+</html>
